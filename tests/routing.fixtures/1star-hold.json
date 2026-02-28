@@ -1,0 +1,18 @@
+{
+  "reviewInput": {
+    "rating": 1,
+    "text": "This listing is spam. Completely fake reviewer.",
+    "reviewerName": "Spam Reviewer",
+    "reviewerType": "candidate",
+    "businessContext": { "businessName": "Example GMB Business", "teamPlatform": "teams" }
+  },
+  "claudeClassification": {
+    "routingPath": "HOLD",
+    "approvalStage": "none",
+    "shouldDraft": false,
+    "celebration": false,
+    "leadershipContextRequired": true,
+    "rationale": "Claude judges the 1-star content as particularly bad/spam."
+  }
+}
+

@@ -1,0 +1,18 @@
+{
+  "reviewInput": {
+    "rating": 5,
+    "text": "Exceptional service. Everything was handled perfectly.",
+    "reviewerName": "Happy Reviewer",
+    "reviewerType": "candidate",
+    "businessContext": { "businessName": "Example Field Business", "teamPlatform": "connectteam" }
+  },
+  "claudeClassification": {
+    "routingPath": "DRAFT_STANDARD_APPROVAL_WITH_CELEBRATION",
+    "approvalStage": "standard",
+    "shouldDraft": true,
+    "celebration": true,
+    "leadershipContextRequired": false,
+    "rationale": "Claude sentiment marks this as exceptional and celebratory."
+  }
+}
+

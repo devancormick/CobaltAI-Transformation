@@ -1,0 +1,18 @@
+{
+  "reviewInput": {
+    "rating": 2,
+    "text": "Bad experience. Staff response was slow, but not malicious.",
+    "reviewerName": "Candid Reviewer",
+    "reviewerType": "client",
+    "businessContext": { "businessName": "Example GMB Business", "teamPlatform": "teams" }
+  },
+  "claudeClassification": {
+    "routingPath": "DRAFT_SENIOR_APPROVAL",
+    "approvalStage": "senior",
+    "shouldDraft": true,
+    "celebration": false,
+    "leadershipContextRequired": false,
+    "rationale": "Claude sentiment/content analysis treats this as a 'bad' case requiring senior approval."
+  }
+}
+
