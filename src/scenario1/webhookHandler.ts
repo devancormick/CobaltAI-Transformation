@@ -43,7 +43,7 @@ export async function handleGoogleMyBusinessReviewWebhook(rawPayload: unknown): 
 
   try {
     const reviewInput: ReviewInput = {
-      rating: payload.rating,
+      rating: payload.rating as ReviewInput["rating"],
       text: payload.text,
       reviewerName: payload.reviewerName,
       reviewerType: payload.reviewerType,
@@ -59,7 +59,7 @@ export async function handleGoogleMyBusinessReviewWebhook(rawPayload: unknown): 
     return {
       ok: true,
       actionPlan,
-      review: { rating: payload.rating, reviewerName: payload.reviewerName, text: payload.text },
+      review: { rating: payload.rating as ReviewInput["rating"], reviewerName: payload.reviewerName, text: payload.text },
     };
   } catch {
     return { ok: false, error: { message: "Failed to route review via Claude.", leadershipAlert } };
