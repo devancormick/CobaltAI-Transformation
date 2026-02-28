@@ -1,0 +1,33 @@
+{
+  "name": "Scenario 1 - Google My Business Review Routing (Make.com)",
+  "version": 1,
+  "description": "Webhook/polling blueprint stub for routing new Google My Business reviews to Claude-driven workflows.",
+  "modules": [
+    {
+      "id": "trigger",
+      "type": "webhook",
+      "description": "Receives a new review event payload from Make.com (webhook)."
+    },
+    {
+      "id": "validate",
+      "type": "javascript",
+      "description": "Validates and normalizes the review payload."
+    },
+    {
+      "id": "route",
+      "type": "javascript",
+      "description": "Calls the shared routing core (Claude classification + action plan)."
+    },
+    {
+      "id": "dispatch",
+      "type": "router",
+      "description": "Routes to downstream modules: leadership alert, draft generation, approvals, posting."
+    },
+    {
+      "id": "error-notify",
+      "type": "webhook",
+      "description": "Fallback module that alerts senior leadership when any step fails."
+    }
+  ]
+}
+
