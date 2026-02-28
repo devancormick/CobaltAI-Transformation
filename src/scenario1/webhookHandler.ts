@@ -17,30 +17,37 @@ const MakeReviewPayloadSchema = z.object({
 
 export type MakeWebhookResult =
   | { ok: true; actionPlan: ActionPlan; review: Pick<ReviewInput, "rating" | "reviewerName" | "text"> }
-  | { ok: false; error: { message: string } };
+  | {
+      ok: false;
+      error: { message: string; leadershipAlert?: { channel: TeamPlatform; kind: "alertSenior"; messagePrompt: string } };
+    };
 
 export async function handleGoogleMyBusinessReviewWebhook(rawPayload: unknown): Promise<MakeWebhookResult> {
+  const parse = MakeReviewPayloadSchema.safeParse(rawPayload);
+  if (!parse.success) {
+    return { ok: false, error: { message: "Invalid payload in webhook handler." } };
+  }
+
+  const payload = parse.data;
+  const teamPlatform = payload.teamPlatform as TeamPlatform;
+  const leadershipAlert = {
+    channel: teamPlatform,
+    kind: "alertSenior" as const,
+    messagePrompt: `Scenario 1 failure. Need immediate human attention for Google My Business review from ${payload.reviewerName}. Business: ${payload.businessName}.`,
+  };
+
+  const apiKey = process.env.CLAUDE_API_KEY;
+  if (!apiKey) {
+    return { ok: false, error: { message: "Missing CLAUDE_API_KEY in environment.", leadershipAlert } };
+  }
+
   try {
-    const payload = MakeReviewPayloadSchema.parse(rawPayload);
-
-    const apiKey = process.env.CLAUDE_API_KEY;
-    if (!apiKey) {
-      return {
-        ok: false,
-        error: { message: "Missing CLAUDE_API_KEY in environment." },
-      };
-    }
-
-    const teamPlatform = payload.teamPlatform as TeamPlatform;
     const reviewInput: ReviewInput = {
       rating: payload.rating,
       text: payload.text,
       reviewerName: payload.reviewerName,
       reviewerType: payload.reviewerType,
-      businessContext: {
-        businessName: payload.businessName,
-        teamPlatform,
-      },
+      businessContext: { businessName: payload.businessName, teamPlatform },
     };
 
     const claudeClient = createClaudeClient({
@@ -55,7 +62,7 @@ export async function handleGoogleMyBusinessReviewWebhook(rawPayload: unknown): 
       review: { rating: payload.rating, reviewerName: payload.reviewerName, text: payload.text },
     };
   } catch {
-    return { ok: false, error: { message: "Invalid payload or unexpected error in webhook handler." } };
+    return { ok: false, error: { message: "Failed to route review via Claude.", leadershipAlert } };
   }
 }
 
